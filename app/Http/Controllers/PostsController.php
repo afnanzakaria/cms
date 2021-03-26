@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Posts\CreatePostsRequest;
+use App\Http\Requests\Posts\UpdatePostsRequest;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use Illuminate\Support\Facades\Storage;
@@ -45,7 +46,8 @@ class PostsController extends Controller
             'title'=>$request->title,
             'description'=>$request->description,
             'content'=>$request->content,
-            'image'=> $image
+            'image'=> $image,
+            'published_at' => $request->published_at
         ]);
 
         session()->flash('success','Post succesfully inserted');
@@ -61,7 +63,7 @@ class PostsController extends Controller
      */
     public function show($id)
     {
-        //
+
     }
 
     /**
@@ -70,9 +72,9 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        //
+        return view('posts.create')->with('posts' , $post);
     }
 
     /**
@@ -82,9 +84,31 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdatePostsRequest $request, Post $post)
     {
-        //
+        //'only' : get specific attr.
+        $data = $request->only(['title','description','published_at','content']);
+
+        //check if new image
+        if($request->hasFile('image')){
+            //upload it
+            $image = $request->image->store('posts');
+
+            //delete old one
+            Storage::delete($post->image);
+
+            $data['image'] = $image;
+        }
+
+
+
+        //update attributes
+        $post->update($data);
+
+        //flash message
+        session()->flash('success', 'Post update successfully');
+
+        return redirect(route('posts.index'));
     }
 
     /**

@@ -12,11 +12,12 @@
         </div>
 
      <div class="card-body">
-
+    @if($posts->count() > 0)
      <table class="table">
                 <thead>
                 <th>Image</th>
                 <th>Description</th>
+                <th></th>
                 <th></th>
                 </thead>
 
@@ -32,15 +33,35 @@
                         {{$post->description}}
                         </td>
 
+                        @if(!$post->trashed())
                         <td>
-
+                        <a href="" class="btn btn-info">Edit</a>
                         </td>
+                        @endif
+
+                        <td>
+                            <form action="{{route('posts.destroy' , $post->id)}}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+
+                                 @if($post->trashed())
+                                <button type="submit" class="btn btn-danger">Trashed</button>
+
+                                @else
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                                @endif
+                            </form>
+                        </td>
+
+
                     </tr>
                     @endforeach
                     </tbody>
                 </table>
+      @else
+        <h3 class="text-center">No Post Yet.</h3>
 
-
+@endif
          </div>
 
 </div>

@@ -26,8 +26,7 @@
                         {{$tag->name}}
                         </td>
                         <td>
-                        <!-- Belum add count -->
-                        {{0}}
+                        {{$tag->posts()->count()}}
                         </td>
                         <td>
                         <a href="{{ route('tags.edit',$tag->id) }}" class="btn btn-info btn-sm">Edit</a>

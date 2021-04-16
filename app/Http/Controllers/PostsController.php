@@ -7,6 +7,8 @@ use App\Http\Requests\Posts\UpdatePostsRequest;
 use App\Models\Categories;
 use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Models\Tag;
+
 //use Illuminate\Support\Facades\Storage;
 
 class PostsController extends Controller
@@ -36,7 +38,7 @@ class PostsController extends Controller
      */
     public function create()
     {
-        return view('posts.create')->with('categories' , Categories::all());
+        return view('posts.create')->with('categories' , Categories::all())->with('tags',Tag::all());
     }
 
     /**
@@ -47,10 +49,11 @@ class PostsController extends Controller
      */
     public function store(CreatePostsRequest $request)
     {
+
         //upload image to storage   //upload path(local) to : storage/posts    //upload to public : set FILESYSTEM_DRIVER to public first
         $image=$request->image->store('posts');
 
-        Post::create([
+        $post = Post::create([
 
             'title'=>$request->title,
             'description'=>$request->description,
@@ -59,6 +62,10 @@ class PostsController extends Controller
             'published_at' => $request->published_at,
             'category_id' => $request->category
         ]);
+
+        if($request->tags){
+            $post->tags()->attach($request->tags);
+        }
 
         session()->flash('success','Post succesfully inserted');
 
@@ -84,7 +91,8 @@ class PostsController extends Controller
      */
     public function edit(Post $post)
     {
-        return view('posts.create')->with('posts' , $post)->with('categories' , Categories::all());
+
+        return view('posts.create')->with('posts' , $post)->with('categories' , Categories::all())->with('tags' , Tag::all());
     }
 
     /**
@@ -96,6 +104,7 @@ class PostsController extends Controller
      */
     public function update(UpdatePostsRequest $request, Post $post)
     {
+
         //'only' : get specific attr.
         $data = $request->only(['title','description','published_at','content']);
 
@@ -113,6 +122,11 @@ class PostsController extends Controller
         }
 
 
+        if($request->tags){
+
+            //many to many sync
+            $post->tags()->sync($request->tags);
+        }
 
         //update attributes
         $post->update($data);

@@ -60,7 +60,7 @@
         @if ($tags->count() > 0)
         <div class="form-group">
             <label for="category">Tags</label>
-            <select name="tags[]" id="tags" class="form-control" multiple>
+            <select name="tags[]" id="tags" class="form-control tag-selector" multiple>
 
                 @foreach ($tags as $tag)
 
@@ -123,16 +123,23 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/trix/1.3.1/trix.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <script>flatpickr('#published_at',{
         enableTime:true
     })
 
+    $(document).ready(function() {
+    $('.tag-selector').select2();
+});
+
 </script>
+
 
 @endsection
 
 @section('css')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/trix/1.3.1/trix.min.css"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 @endsection

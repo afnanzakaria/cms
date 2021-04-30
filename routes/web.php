@@ -16,9 +16,13 @@ use App\Http\Controllers\TagsController;
 |
 */
 
-Route::get('/', function () {
+/* Route::get('/', function () {
     return view('welcome');
-});
+}); */
+
+Route::get('/','WelcomeController@index');
+
+Route::get('/blog/posts/{post}' ,[App\Http\Controllers\blog\PostsController::class,'show'])->name('blog.show');
 
 Auth::routes();
 

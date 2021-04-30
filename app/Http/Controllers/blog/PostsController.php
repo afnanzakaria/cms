@@ -1,0 +1,17 @@
+<?php
+
+namespace App\Http\Controllers\blog;
+
+use App\Http\Controllers\Controller;
+use App\Models\Post;
+use Illuminate\Http\Request;
+
+class PostsController extends Controller
+{
+
+    public function show(Post $post){
+
+        return view('blog.show')->with('post',$post);
+        
+    }
+}

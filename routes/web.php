@@ -20,7 +20,7 @@ use App\Http\Controllers\TagsController;
     return view('welcome');
 }); */
 
-Route::get('/','WelcomeController@index');
+Route::get('/','WelcomeController@index')->name('welcome');
 
 Route::get('/blog/posts/{post}' ,[App\Http\Controllers\blog\PostsController::class,'show'])->name('blog.show');
 

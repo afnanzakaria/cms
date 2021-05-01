@@ -13,6 +13,11 @@ class Post extends Model
 
     use SoftDeletes;
 
+    //identify published_at as date
+    protected $dates =[
+        'published_at'
+    ];
+
     protected $fillable = [
         'title','description','content','published_at','image','category_id'
     ];
@@ -42,16 +47,21 @@ class Post extends Model
         return $this->belongsTo(User::class);
     }
 
+    //query date published
+    public function scopePublished($query){
+        return $query->where('published_at' , '<=' , now());
+    }
+
     //search function
     public function scopeSearched($query){
 
         $search = request()->query('search');
 
         if(!$search){
-            return $query;
+            return $query->published();
         }
 
-        return $query->where('title','LIKE',"%{$search}%");
+        return $query->published()->where('title','LIKE',"%{$search}%");
     }
 
 }

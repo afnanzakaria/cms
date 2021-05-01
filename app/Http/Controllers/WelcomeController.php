@@ -12,7 +12,8 @@ class WelcomeController extends Controller
     public function index(){
 
 
-        $search = request()->query('search');
+        //x guna sbb dh guna scope method
+        /* $search = request()->query('search');
 
         if($search){
 
@@ -20,12 +21,13 @@ class WelcomeController extends Controller
         }else{
 
             $posts = Post::simplePaginate(2);
-        }
+        } */
+
 
         return view('welcome')
         ->with('categories' , Categories::all())
         ->with('tags' , Tag::all())
         //->with('posts' , Post::all());
-        ->with('posts' , $posts);
+        ->with('posts' , Post::searched()->simplePaginate(2));
     }
 }

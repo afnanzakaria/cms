@@ -24,6 +24,10 @@ Route::get('/','WelcomeController@index')->name('welcome');
 
 Route::get('/blog/posts/{post}' ,[App\Http\Controllers\blog\PostsController::class,'show'])->name('blog.show');
 
+Route::get('blog/category/{category}' , [App\Http\Controllers\blog\PostsController::class,'category'])->name('blog.category');
+
+Route::get('blog/tag/{tag}' , [App\Http\Controllers\blog\PostsController::class,'tag'])->name('blog.tag');
+
 Auth::routes();
 
 //Route::resource('posts', 'PostsController')->middleware(['auth','verifyCategoriesCount']);
